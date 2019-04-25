@@ -18,14 +18,14 @@ import utils.DBUtil;
  * Servlet implementation class ReportIndexServlet
  */
 @WebServlet("/reports/index")
-public class ReportIndexServlet extends HttpServlet {
+public class ReportsIndexServlet extends HttpServlet {
     private static final int PAGE_NUM = 15; //１ページあたりの表示件数
     private static final long serialVersionUID = 1L;
 
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReportIndexServlet() {
+    public ReportsIndexServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
