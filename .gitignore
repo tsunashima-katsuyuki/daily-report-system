@@ -24,3 +24,4 @@ WebContent/META-INF/application.properties
 
 # UML
 uml/
+src/umlWriting/
