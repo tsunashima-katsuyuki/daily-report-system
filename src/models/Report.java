@@ -119,7 +119,4 @@ public class Report {
         this.updated_at = updated_at;
     }
 
-
-
-
 }

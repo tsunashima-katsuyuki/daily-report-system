@@ -21,3 +21,6 @@ Thumbs.db
 
 # Application Properties
 WebContent/META-INF/application.properties
+
+# UML
+uml/
