@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(
             name = "checkHasLiked",//指定された社員と日報のいいね情報が存在するか
-            query = "SELECT COUNT(l) FROM Like AS l WHERE l.employee = :employee AND l.report = :report"
+            query = "SELECT l FROM Like AS l WHERE l.employee = :employee AND l.report = :report"
             ),
     @NamedQuery(
             name = "getLikesCount",//1つの日報についているいいねの数

@@ -5,7 +5,12 @@
     <c:param name="content">
         <c:choose>
             <c:when test="${report != null}">
-                <h2>日報　詳細ページ</h2>
+                <c:if test="${flush != null}">
+                    <div id="flush_success">
+                       <c:out value="${flush}"></c:out>
+                    </div>
+                </c:if>
+                <h2>日報 詳細ページ</h2>
 
                 <table>
                     <tbody>
@@ -47,13 +52,15 @@
                     <c:when test="${sessionScope.login_employee.id == report.employee.id}">
                         <p><a href="<c:url value='/reports/edit?id=${report.id}' />">この日報を編集する</a></p>
                     </c:when>
-                    <c:when test="${sessionScope.hasLiked == false}">
+                    <c:when test="${sessionScope.like == null}">
                         <form method="POST" action="<c:url value='/likes?id=${report.id}' />">
+                            <input type="hidden" name="_token" value="${_token}" />
                             <button type="submit" id="like">いいね！</button>
                         </form>
                     </c:when>
                     <c:otherwise>
-                        <form method="POST" action="<c:url value='/likes?id=${report.id}' />">
+                        <form method="POST" action="<c:url value='/likes?like_id=${sessionScope.like.id}' />">
+                            <input type="hidden" name="_token" value="${_token}" />
                             <button type="submit" id="like">いいね！を解除する</button>
                         </form>
                     </c:otherwise>

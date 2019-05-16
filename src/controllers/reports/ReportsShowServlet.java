@@ -3,6 +3,7 @@ package controllers.reports;
 import java.io.IOException;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
+import models.Like;
 import models.Report;
 import utils.DBUtil;
 
@@ -43,19 +45,26 @@ public class ReportsShowServlet extends HttpServlet {
                 .setParameter("report", r)
                 .getSingleResult();
 
-
-        Boolean hasLiked = (
-                ((long)em.createNamedQuery("checkHasLiked", Long.class)
-                        .setParameter("employee", login_employee)
-                        .setParameter("report", r)
-                        .getSingleResult())
-                >0);
+        Like l;
+        try{
+            l = (Like)em.createNamedQuery("checkHasLiked", Like.class)
+                    .setParameter("employee", login_employee)
+                    .setParameter("report", r)
+                    .getSingleResult();
+        }catch(NoResultException e){
+            l = null;
+        }
 
         em.close();
         request.setAttribute("likes_count", likes_count);
         request.setAttribute("report", r);
-        request.getSession().setAttribute("hasLiked", hasLiked);
-        request.setAttribute("_token", request.getSession().getId());
+        request.getSession().setAttribute("like", l);
+        request.getSession().setAttribute("_token", request.getSession().getId());
+
+        if(request.getSession().getAttribute("flush") != null){
+            request.setAttribute("flush", request.getSession().getAttribute("flush"));
+            request.getSession().removeAttribute("flush");
+        }
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/reports/show.jsp");
         rd.forward(request, response);
