@@ -1,6 +1,7 @@
 package controllers.reports;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -19,7 +20,7 @@ import utils.DBUtil;
  */
 @WebServlet("/reports/index")
 public class ReportsIndexServlet extends HttpServlet {
-    private static final int PAGE_NUM = 15; //１ページあたりの表示件数
+    private static final int PAGE_NUM = 10; //１ページあたりの表示件数
     private static final long serialVersionUID = 1L;
 
     /**
@@ -51,10 +52,20 @@ public class ReportsIndexServlet extends HttpServlet {
         long reports_count = (long)em.createNamedQuery("getReportsCount", Long.class)
                                 .getSingleResult();
 
+        List<Long> likes_counts= new ArrayList<Long>();
+        for(Report r: reports){
+            likes_counts.add(
+                            (long)em.createNamedQuery("getLikesCount", Long.class)
+                            .setParameter("report", r)
+                            .getSingleResult()
+                            ) ;
+        }
+
         em.close();
 
         request.setAttribute("reports", reports);
         request.setAttribute("reports_count", reports_count);
+        request.setAttribute("likes_counts", likes_counts);
         request.setAttribute("page", page);
         request.setAttribute("page_num", PAGE_NUM);
 
