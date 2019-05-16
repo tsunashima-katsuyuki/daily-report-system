@@ -18,7 +18,7 @@ import javax.persistence.Table;
             query = "SELECT COUNT(l) FROM Like AS l WHERE l.employee = :employee AND l.report = :report"
             ),
     @NamedQuery(
-            name = "getLikeCount",//1つの日報についているいいねの数
+            name = "getLikesCount",//1つの日報についているいいねの数
             query = "SELECT COUNT(l) FROM Like AS l WHERE l.report = :report"
             )
 })
