@@ -12,7 +12,7 @@
                 </c:if>
                 <h2>日報 詳細ページ</h2>
 
-                <table>
+                <table id="report_details">
                     <tbody>
                         <tr>
                             <th>氏名</th>
@@ -24,8 +24,8 @@
                         </tr>
                         <tr>
                             <th>内容</th>
-                            <td>
-                                <pre><c:out value="${report.content}" /></pre>
+                            <td class="report_content">
+                                <c:out value="${report.content}" />
                             </td>
                         </tr>
                         <tr>

@@ -13,13 +13,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import models.Employee;
 import models.Report;
-import utils.DBUtil;
 
 /**
  * Servlet implementation class TopPageIndexServlet
  */
 @WebServlet("/index.html")
-public class TopPageIndexServlet extends HttpServlet {
+public class TopPageIndexServlet extends IndexBaseServlet {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -35,42 +34,29 @@ public class TopPageIndexServlet extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        EntityManager em = DBUtil.createEntityManager();
-
-        Employee login_employee = (Employee)request.getSession().getAttribute("login_employee");
-
-        int page;
-        try{
-            page = Integer.parseInt(request.getParameter("page"));
-        } catch(Exception e) {
-            page = 1;
-        }
-        List<Report> reports = em.createNamedQuery("getMyAllReports", Report.class)
-                                  .setParameter("employee", login_employee)
-                                  .setFirstResult(15 * (page - 1))
-                                  .setMaxResults(15)
-                                  .getResultList();
-
-        long reports_count = (long)em.createNamedQuery("getMyReportsCount", Long.class)
-                                     .setParameter("employee", login_employee)
-                                     .getSingleResult();
-
-        em.close();
-
-        request.setAttribute("reports", reports);
-        request.setAttribute("reports_count", reports_count);
-        request.setAttribute("page", page);
-
-
-        if(request.getSession().getAttribute("flush") != null){
-            request.setAttribute("flush", request.getSession().getAttribute("flush"));
-            request.getSession().removeAttribute("flush");
-        }
-
-
+        super.doGet(request, response);
 
         RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/views/topPage/index.jsp");
         rd.forward(request, response);
+    }
+
+    @Override
+    protected List<Report> getReportList(int page, EntityManager em,HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        Employee login_employee = (Employee)request.getSession().getAttribute("login_employee");
+
+        return em.createNamedQuery("getMyAllReports", Report.class)
+                .setParameter("employee", login_employee)
+                .setFirstResult(PAGE_NUM * (page - 1))
+                .setMaxResults(PAGE_NUM)
+                .getResultList();
+    }
+
+    @Override
+    protected long getReportsCount(EntityManager em,HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+        Employee login_employee = (Employee)request.getSession().getAttribute("login_employee");
+        return (long)em.createNamedQuery("getMyReportsCount", Long.class)
+                .setParameter("employee", login_employee)
+                .getSingleResult();
     }
 
 }

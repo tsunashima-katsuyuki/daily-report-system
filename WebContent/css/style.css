@@ -129,6 +129,22 @@ h1 a {
     color: #eeeeee;
 }
 
+table#report_list {
+  table-layout: fixed;
+}
+
+table#report_list td {
+  overflow-wrap : break-word;
+}
+
+table#report_details {
+  table-layout: fixed;
+}
+
+table#report_details .report_content {
+  overflow-wrap : break-word;
+}
+
 table#report_list th {
     font-weight: bold;
     padding: 10px 2%;
